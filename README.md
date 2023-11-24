@@ -1,2 +1,2 @@
 npm i express
-Hi
+npm i mysql
