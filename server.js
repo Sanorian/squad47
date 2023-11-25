@@ -100,7 +100,7 @@ app.put("/addapplication", (req, res)=>{
                     if (err) {
                         res.send({res:"bad", reason: "db"});
                         throw err;
-                    }                
+                    }
                     res.send({res:"good"});
                 });
             });
@@ -134,7 +134,7 @@ app.patch("/updateapplication", (req, res)=>{
                     if (err) {
                         res.send({res:"bad", reason: "db"});
                         throw err;
-                    }                
+                    }
                     res.send({res:"good"});
                 });
             });
