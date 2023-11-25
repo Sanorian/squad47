@@ -1,9 +1,12 @@
 const express = require('express');
 const app = express();
 const mysql = require("mysql");
+var cors = require('cors');
+
+app.use(cors());
 
 app.post("/getallapplications", (req, res)=>{
-    res.header('Access-Control-Allow-Origin', '*');
+    res.json({msg: 'This is CORS-enabled for all origins!'})    
     try {
         const username = req.body.username;
         const password = req.body.password;
@@ -42,7 +45,7 @@ app.post("/getallapplications", (req, res)=>{
 });
 
 app.post("/getoneapplication", (req, res)=>{
-    res.header('Access-Control-Allow-Origin', '*');
+    res.json({msg: 'This is CORS-enabled for all origins!'})    
     try {
         const id = req.body.id;
         const username = req.body.username;
@@ -82,7 +85,7 @@ app.post("/getoneapplication", (req, res)=>{
 });
 
 app.put("/addapplication", (req, res)=>{
-    res.header('Access-Control-Allow-Origin', '*');
+    res.json({msg: 'This is CORS-enabled for all origins!'})    
     try {
         const username = req.body.username;
         const password = req.body.password;
@@ -138,7 +141,7 @@ app.put("/addapplication", (req, res)=>{
 });
 
 app.patch("/updateapplication", (req, res)=>{
-    res.header('Access-Control-Allow-Origin', '*');
+    res.json({msg: 'This is CORS-enabled for all origins!'})    
     try {
         const username = req.body.username;
         const password = req.body.password;
@@ -177,7 +180,7 @@ app.patch("/updateapplication", (req, res)=>{
 });
 
 app.post("/login", (req, res)=>{
-    res.header('Access-Control-Allow-Origin', '*');
+    res.json({msg: 'This is CORS-enabled for all origins!'})    
     try {
         const username = req.body.username;
         const password = req.body.password;
@@ -215,7 +218,7 @@ app.post("/login", (req, res)=>{
 
 const port = 3000;
 app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
+  console.log(`App listening on port ${port}`);
   console.log(`http://localhost:${port}`);
 });
 
