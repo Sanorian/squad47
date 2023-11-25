@@ -15,7 +15,8 @@ CREATE TABLE applications (ID INT PRIMARY KEY AUTO_INCREMENT,
                             HasMoney VARCHAR(3),
                             Moderated VARCHAR(3),
                             Verdict VARCHAR(10),
-                            Moderartor VARCHAR(5)
+                            Moderartor VARCHAR(5),
+                            Commentary TEXT
                             );
 
 CREATE TABLE users (ID INT PRIMARY KEY AUTO_INCREMENT, username VARCHAR(50), password VARCHAR(50));
