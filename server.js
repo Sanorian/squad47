@@ -12,7 +12,7 @@ app.post("/getallapplications", (req, res)=>{
     if (haveAccess(username, password, con)){
         con.connect(function(err) {
             if (err) throw err;
-            let sql = "SELECT * FROM requests WHERE Moderated='no'";
+            let sql = "SELECT * FROM applications WHERE Moderated='no'";
             con.query(sql, function (err, result) {
                 if (err) {
                     res.send({res:"bad", reason: "db"});
@@ -36,7 +36,7 @@ app.post("/getoneapplication", (req, res)=>{
     if (haveAccess(username, password, con)){
         con.connect(function(err) {
             if (err) throw err;
-            let sql = "SELECT * FROM requests WHERE ID='"+id+"'";
+            let sql = `SELECT * FROM applications WHERE ID='${id}'`;
             con.query(sql, function (err, result) {
                 if (err) {
                     res.send({res:"bad", reason: "db"});
@@ -52,14 +52,29 @@ app.post("/getoneapplication", (req, res)=>{
 
 app.put("/addapplication", (req, res)=>{
     const username = req.body.username;
-    const password = req.query.password;
+    const password = req.body.password;
+
+    const FIO = req.body.fio;
+    const registrationAdress = req.body.registrationadress;
+    const livingAdress = req.body.livingadress;
+    const isMarried = req.body.ismarried;
+    const hasChildren = req.body.haschildren;
+    const workAdress = req.body.workadress;
+    const workTimeInMonths = req.body.worktimeinmonths;
+    const workName = req.body.workname;
+    const salary  = req.body.salary;
+    const salaryDocument = req.body.salarydocument;
+    const additionalIncome = req.body.additionalincome;
+    const additionalIncomeDocument = req.body.additionalincomedocument;
+    const fromAdditionalIncome = req.body.fromadditionalincome;
+    const hasMoney = req.body.hasMoney;
 
     var con = getConnection(mysql);
 
     if (haveAccess(username, password, con)){
         con.connect(function(err) {
             if (err) throw err;
-            let sql = "INSERT INTO requests () VALUES()";
+            let sql = `INSERT INTO applications (FIO, PassportData, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkAdress, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney) VALUES('${fio}', '${registrationAdress}', '${livingAdress}', '${isMarried}', '${hasChildren}', '${workAdress}', '${workTimeInMonths}', '${workName}', '${salary}', '${salaryDocument}', '${additionalIncome}', '${additionalIncomeDocument}', '${fromAdditionalIncome}', '${hasMoney}')`;
             con.query(sql, function (err, result) {
                 if (err) {
                     res.send({res:"bad", reason: "db"});
@@ -84,7 +99,7 @@ app.patch("/updateapplication", (req, res)=>{
     if (haveAccess(username, password, con)){
         con.connect(function(err) {
             if (err) throw err;
-            let sql = "UPDATE data SET moderated='yes' AND verdict='"+verdict+"' WHERE ID='"+id+"'";
+            let sql = `UPDATE applications SET Moderated='yes' AND Verdict='${verdict}' AND Moderator=(SELECT ID from users WHERE username='${username}' AND password='${password}') WHERE ID='${id}'`;
             con.query(sql, function (err, result) {
                 if (err) {
                     res.send({res:"bad", reason: "db"});
@@ -106,7 +121,7 @@ app.listen(port, () => {
 function haveAccess(username, password, con){
     con.connect(function(err) {
         if (err) throw err;
-        sql = "SELECT * FROM users WHERE username='"+username+"' AND password='"+password+"'";
+        sql = `SELECT * FROM users WHERE username='${username}' AND password='${password}`
         con.query(sql, function (err, result) {
             if (err) throw err;
             if (result.length==1){
@@ -120,7 +135,8 @@ function haveAccess(username, password, con){
 function getConnection(mysql){
     return mysql.createConnection({
         host: "localhost",
-        user: "yourusername",
-        password: "yourpassword"
+        user: "manager",
+        password: "manager123",
+        database: "CreditDB"
     });
 }
