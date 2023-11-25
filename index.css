@@ -14,8 +14,10 @@ body{
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     text-align: center;
-    margin-top: 15%;
+    margin-top: 5%;
     color: rgb(231, 231, 231);
+    font-size: 4.5vmin;
+    margin-bottom: 5%;
 }
 
 .login h1,h2{
