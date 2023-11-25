@@ -3,35 +3,33 @@ const app = express();
 const mysql = require("mysql");
 var cors = require('cors');
 
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use(cors());
 
-app.post("/getallapplications", (req, res)=>{
-    res.json({msg: 'This is CORS-enabled for all origins!'})    
+app.post("/getapplicationbyid", (req, res)=>{
     try {
         const username = req.body.username;
         const password = req.body.password;
+        const applicationID = req.body.applicationID;
     
         var con = getConnection(mysql);
     
         haveAccess(username, password, con, function(access){
             if (access){
-                if (err) console.log(err);
-                let sql = "SELECT ID FROM applications WHERE Moderated='no'";
-                con.query(sql, function (err, result) {
+                let sql = "SELECT * FROM applications WHERE ID=?";
+                con.query(sql, [applicationID], function (err, result) {
                     if (err) {
                         res.send({res:"bad", reason: "db"});
                         console.log(err);
-                    }
-                    res.send({res:"good", data: result});
-                });
-                if (result.length!=0){
-                    res.send({res:"good", data: result});
-                } else {
-                    res.send({res: "bad", reason:"noone"});
-                }
-                con.end(function(err) {
-                    if (err) {
-                      return console.log("Ошибка: " + err.message);
+                    } else {
+                        if (result.length!=0){
+                            res.send({res:"good", data: result});
+                        } else {
+                            res.send({res: "bad", reason:"noone"});
+                        }
                     }
                 });
             } else {
@@ -45,33 +43,24 @@ app.post("/getallapplications", (req, res)=>{
 });
 
 app.post("/getoneapplication", (req, res)=>{
-    res.json({msg: 'This is CORS-enabled for all origins!'})    
     try {
         const id = req.body.id;
         const username = req.body.username;
         const password = req.body.password;
         
-        var con = getConnection(mysql);
-    
+        var con = getConnection();
+
         haveAccess(username, password, con, function(access){
             if (access){
-                con.connect(function(err) {
-                    if (err) console.log(err);
-                    let sql = `SELECT FIO, BirthDate, PassportData, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkPlace, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney, MoneyCategory, HowMuchMoney, IncomeLink1, IncomeLink2 FROM applications WHERE ID='${id}'`;
-                    con.query(sql, function (err, result) {
-                        if (err) {
-                            res.send({res:"bad", reason: "db"});
-                            console.log(err);
-                        }if (result.length!=0){
-                            res.send({res:"good", data: result[0]});
-                        } else {
-                            res.send({res: "bad", reason:"noone"});
-                        }
-                    });
-                });
-                con.end(function(err) {
+                let sql = `SELECT FIO, BirthDate, PassportData, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkPlace, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney, MoneyCategory, HowMuchMoney, IncomeLink1, IncomeLink2 FROM applications WHERE ID='${id}'`;
+                con.query(sql, function (err, result) {
                     if (err) {
-                      return console.log("Ошибка: " + err.message);
+                        res.send({res:"bad", reason: "db"});
+                        console.log(err);
+                    } else if (result.length != 0){
+                        res.send({res:"good", data: result[0]});
+                    } else {
+                        res.send({res: "bad", reason:"noone"});
                     }
                 });
             } else {
@@ -84,50 +73,43 @@ app.post("/getoneapplication", (req, res)=>{
     }
 });
 
+
 app.put("/addapplication", (req, res)=>{
-    res.json({msg: 'This is CORS-enabled for all origins!'})    
     try {
         const username = req.body.username;
         const password = req.body.password;
-    
+
         const fio = req.body.fio;
-        const birthDate = req.body.birthdate;
-        const registrationAdress = req.body.registrationadress;
-        const livingAdress = req.body.livingadress;
-        const isMarried = req.body.ismarried;
-        const hasChildren = req.body.haschildren;
-        const workPlace = req.body.workplace;
-        const workTimeInMonths = req.body.worktimeinmonths;
-        const workName = req.body.workname;
+        const birthDate = req.body.birthDate;
+        const registrationAdress = req.body.registrationAdress;
+        const livingAdress = req.body.livingAdress;
+        const isMarried = req.body.isMarried;
+        const hasChildren = req.body.hasChildren;
+        const workPlace = req.body.workPlace;
+        const workTimeInMonths = req.body.workTimeInMonths;
+        const workName = req.body.workName;
         const salary  = req.body.salary;
-        const salaryDocument = req.body.salarydocument;
-        const additionalIncome = req.body.additionalincome;
-        const additionalIncomeDocument = req.body.additionalincomedocument;
-        const fromAdditionalIncome = req.body.fromadditionalincome;
+        const salaryDocument = req.body.salaryDocument;
+        const additionalIncome = req.body.additionalIncome;
+        const additionalIncomeDocument = req.body.additionalIncomeDocument;
+        const fromAdditionalIncome = req.body.fromAdditionalIncome;
         const hasMoney = req.body.hasMoney;
-        const incomeLink1 = req.body.incomelink1;
-        const incomeLink2 = req.body.incomelink2;
-        const moneyCategory = req.body.moneycategory;
-        const howMuchMoney = req.body.howmuchmoney;
-    
-        var con = getConnection(mysql);
-    
+        const incomeLink1 = req.body.incomeLink1;
+        const incomeLink2 = req.body.incomeLink2;
+        const moneyCategory = req.body.moneyCategory;
+        const howMuchMoney = req.body.howMuchMoney;
+
+        var con = getConnection();
+
         haveAccess(username, password, con, function(access){
             if (access){
-                con.connect(function(err) {
-                    if (err) console.log(err);
-                    let sql = `INSERT INTO applications (FIO, BirthDate, PassportData, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkPlace, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney, MoneyCategory, HowMuchMoney, Moderated, IncomeLink1, IncomeLink2) VALUES('${fio}', '${birthDate}', '${registrationAdress}', '${livingAdress}', '${isMarried}', '${hasChildren}', '${workPlace}', '${workTimeInMonths}', '${workName}', '${salary}', '${salaryDocument}', '${additionalIncome}', '${additionalIncomeDocument}', '${fromAdditionalIncome}', '${hasMoney}', '${moneyCategory}', '${howMuchMoney}', 'no', '${incomeLink1}', '${incomeLink2}')`;
-                    con.query(sql, function (err, result) {
-                        if (err) {
-                            res.send({res:"bad", reason: "db"});
-                            console.log(err);
-                        }
-                        res.send({res:"good"});
-                    });
-                });
-                con.end(function(err) {
+                let sql = "INSERT INTO applications (FIO, BirthDate, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkPlace, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney, MoneyCategory, HowMuchMoney, Moderated, IncomeLink1, IncomeLink2) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                con.query(sql, [fio, birthDate, registrationAdress, livingAdress, isMarried, hasChildren, workPlace, workTimeInMonths, workName, salary, salaryDocument, additionalIncome, additionalIncomeDocument, fromAdditionalIncome, hasMoney, moneyCategory, howMuchMoney, 'no', incomeLink1, incomeLink2], function (err, result) {
                     if (err) {
-                      return console.log("Ошибка: " + err.message);
+                        res.send({res:"bad", reason: "db"});
+                        console.log(err);
+                    } else {
+                        res.send({res:"good"});
                     }
                 });
             } else {
@@ -140,33 +122,26 @@ app.put("/addapplication", (req, res)=>{
     }
 });
 
+
 app.patch("/updateapplication", (req, res)=>{
-    res.json({msg: 'This is CORS-enabled for all origins!'})    
     try {
         const username = req.body.username;
         const password = req.body.password;
         const id = req.body.id;
         const verdict = req.body.verdict;
         const commentary = req.body.commentary;
-    
-        var con = getConnection(mysql);
-    
+
+        var con = getConnection();
+
         haveAccess(username, password, con, function(access){
             if (access){
-                con.connect(function(err) {
-                    if (err) console.log(err);
-                    let sql = `UPDATE applications SET Moderated='yes', Verdict='${verdict}', Moderator=(SELECT ID from users WHERE username='${username}' AND password='${password}'), Commentary='${commentary}' WHERE ID='${id}'`;
-                    con.query(sql, function (err, result) {
-                        if (err) {
-                            res.send({res:"bad", reason: "db"});
-                            if (err) console.log(err);
-                        }
-                        res.send({res:"good"});
-                    });
-                });
-                con.end(function(err) {
+                let sql = "UPDATE applications SET Moderated='yes', Verdict=?, Moderator=(SELECT ID from users WHERE username=? AND password=?), Commentary=? WHERE ID=?";
+                con.query(sql, [verdict, username, password, commentary, id], function (err, result) {
                     if (err) {
-                      return console.log("Ошибка: " + err.message);
+                        res.send({res:"bad", reason: "db"});
+                        console.log(err);
+                    } else {
+                        res.send({res:"good", result: result});
                     }
                 });
             } else {
@@ -180,7 +155,6 @@ app.patch("/updateapplication", (req, res)=>{
 });
 
 app.post("/login", (req, res)=>{
-    res.json({msg: 'This is CORS-enabled for all origins!'})    
     try {
         const username = req.body.username;
         const password = req.body.password;
@@ -189,20 +163,12 @@ app.post("/login", (req, res)=>{
     
         haveAccess(username, password, con, function(access){
             if (access){
-                con.connect(function(err) {
-                    if (err) console.log(err);
-                    let sql = `SELECT * FROM users WHERE username='${username}' AND password='${password}'`;
-                    con.query(sql, function (err, result) {
-                        if (err) {
-                            res.send({res:"bad", reason: "db"});
-                            if (err) console.log(err);
-                        }                
-                        res.send({res:"good", username:username, password: password});
-                    });
-                });
-                con.end(function(err) {
+                con.query('SELECT * FROM users WHERE username=? AND password=?', [username, password], function (err, result) {
                     if (err) {
-                      return console.log("Ошибка: " + err.message);
+                        res.send({res:"bad", reason: "db"});
+                        console.log(err);
+                    } else {
+                        res.send({res:"good", username:username, password: password});
                     }
                 });
             } else {
