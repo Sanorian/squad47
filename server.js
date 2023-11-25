@@ -9,18 +9,16 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
 
-app.post("/getapplicationbyid", (req, res)=>{
+app.post("/getallapplications", (req, res)=>{
     try {
         const username = req.body.username;
         const password = req.body.password;
-        const applicationID = req.body.applicationID;
     
         var con = getConnection(mysql);
     
         haveAccess(username, password, con, function(access){
             if (access){
-                let sql = "SELECT * FROM applications WHERE ID=?";
-                con.query(sql, [applicationID], function (err, result) {
+                con.query("SELECT * FROM applications WHERE Moderated='no'", function (err, result) {
                     if (err) {
                         res.send({res:"bad", reason: "db"});
                         console.log(err);
@@ -32,6 +30,7 @@ app.post("/getapplicationbyid", (req, res)=>{
                         }
                     }
                 });
+                con.end();
             } else {
                 res.send({res:"bad", reason: "access"});
             }
@@ -41,6 +40,7 @@ app.post("/getapplicationbyid", (req, res)=>{
         res.send({res:"bad", reason: "server"});
     }
 });
+
 
 app.post("/getoneapplication", (req, res)=>{
     try {
@@ -63,6 +63,7 @@ app.post("/getoneapplication", (req, res)=>{
                         res.send({res: "bad", reason:"noone"});
                     }
                 });
+                con.end();
             } else {
                 res.send({res:"bad", reason: "access"});
             }
@@ -100,7 +101,6 @@ app.put("/addapplication", (req, res)=>{
         const howMuchMoney = req.body.howMuchMoney;
 
         var con = getConnection();
-
         haveAccess(username, password, con, function(access){
             if (access){
                 let sql = "INSERT INTO applications (FIO, BirthDate, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkPlace, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney, MoneyCategory, HowMuchMoney, Moderated, IncomeLink1, IncomeLink2) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
@@ -112,13 +112,14 @@ app.put("/addapplication", (req, res)=>{
                         res.send({res:"good"});
                     }
                 });
+                con.end();
             } else {
                 res.send({res:"bad", reason: "access"});
             }
         });
     } catch (error) {
-        console.error(error);
-        res.send({res:"bad", reason: "server"});
+                console.error(error);
+                res.send({res:"bad", reason: "server"});
     }
 });
 
@@ -144,6 +145,7 @@ app.patch("/updateapplication", (req, res)=>{
                         res.send({res:"good", result: result});
                     }
                 });
+                con.end();
             } else {
                 res.send({res:"bad", reason: "access"});
             }
@@ -171,6 +173,7 @@ app.post("/login", (req, res)=>{
                         res.send({res:"good", username:username, password: password});
                     }
                 });
+                con.end();
             } else {
                 res.send({res:"bad", reason: "access"});
             }
@@ -184,7 +187,6 @@ app.post("/login", (req, res)=>{
 
 const port = 3000;
 app.listen(port, () => {
-  console.log(`App listening on port ${port}`);
   console.log(`http://localhost:${port}`);
 });
 
