@@ -11,6 +11,7 @@ app.post("/getallapplications", (req, res)=>{
 
     haveAccess(username, password, con, function(access){
         if (access){
+            if (err) throw err;
             let sql = "SELECT * FROM applications WHERE Moderated='no'";
             con.query(sql, function (err, result) {
                 if (err) {
@@ -18,6 +19,11 @@ app.post("/getallapplications", (req, res)=>{
                     throw err;
                 }                
                 res.send({res:"good", data: result});
+            });
+            con.end(function(err) {
+                if (err) {
+                  return console.log("Ошибка: " + err.message);
+                }
             });
         } else {
             res.send({res:"bad", reason: "access"});
@@ -34,13 +40,21 @@ app.post("/getoneapplication", (req, res)=>{
 
     haveAccess(username, password, con, function(access){
         if (access){
-            let sql = `SELECT * FROM applications WHERE ID='${id}'`;
-            con.query(sql, function (err, result) {
+            con.connect(function(err) {
+                if (err) throw err;
+                let sql = `SELECT * FROM applications WHERE ID='${id}'`;
+                con.query(sql, function (err, result) {
+                    if (err) {
+                        res.send({res:"bad", reason: "db"});
+                        throw err;
+                    }                
+                    res.send({res:"good", data: result});
+                });
+            });
+            con.end(function(err) {
                 if (err) {
-                    res.send({res:"bad", reason: "db"});
-                    throw err;
-                }                
-                res.send({res:"good", data: result});
+                  return console.log("Ошибка: " + err.message);
+                }
             });
         } else {
             res.send({res:"bad", reason: "access"});
@@ -71,13 +85,21 @@ app.put("/addapplication", (req, res)=>{
 
     haveAccess(username, password, con, function(access){
         if (access){
-            let sql = `INSERT INTO applications (FIO, PassportData, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkAdress, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney) VALUES('${fio}', '${registrationAdress}', '${livingAdress}', '${isMarried}', '${hasChildren}', '${workAdress}', '${workTimeInMonths}', '${workName}', '${salary}', '${salaryDocument}', '${additionalIncome}', '${additionalIncomeDocument}', '${fromAdditionalIncome}', '${hasMoney}')`;
-            con.query(sql, function (err, result) {
+            con.connect(function(err) {
+                if (err) throw err;
+                let sql = `INSERT INTO applications (FIO, PassportData, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkAdress, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney) VALUES('${fio}', '${registrationAdress}', '${livingAdress}', '${isMarried}', '${hasChildren}', '${workAdress}', '${workTimeInMonths}', '${workName}', '${salary}', '${salaryDocument}', '${additionalIncome}', '${additionalIncomeDocument}', '${fromAdditionalIncome}', '${hasMoney}')`;
+                con.query(sql, function (err, result) {
+                    if (err) {
+                        res.send({res:"bad", reason: "db"});
+                        throw err;
+                    }                
+                    res.send({res:"good"});
+                });
+            });
+            con.end(function(err) {
                 if (err) {
-                    res.send({res:"bad", reason: "db"});
-                    throw err;
-                }                
-                res.send({res:"good"});
+                  return console.log("Ошибка: " + err.message);
+                }
             });
         } else {
             res.send({res:"bad", reason: "access"});
@@ -95,13 +117,21 @@ app.patch("/updateapplication", (req, res)=>{
 
     haveAccess(username, password, con, function(access){
         if (access){
-            let sql = `UPDATE applications SET Moderated='yes', Verdict='${verdict}', Moderator=(SELECT ID from users WHERE username='${username}' AND password='${password}') WHERE ID='${id}'`;
-            con.query(sql, function (err, result) {
+            con.connect(function(err) {
+                if (err) throw err;
+                let sql = `UPDATE applications SET Moderated='yes', Verdict='${verdict}', Moderator=(SELECT ID from users WHERE username='${username}' AND password='${password}') WHERE ID='${id}'`;
+                con.query(sql, function (err, result) {
+                    if (err) {
+                        res.send({res:"bad", reason: "db"});
+                        throw err;
+                    }                
+                    res.send({res:"good"});
+                });
+            });
+            con.end(function(err) {
                 if (err) {
-                    res.send({res:"bad", reason: "db"});
-                    throw err;
-                }                
-                res.send({res:"good"});
+                  return console.log("Ошибка: " + err.message);
+                }
             });
         } else {
             res.send({res:"bad", reason: "access"});
@@ -117,13 +147,21 @@ app.post("/login", (req, res)=>{
 
     haveAccess(username, password, con, function(access){
         if (access){
-            let sql = `SELECT * FROM users WHERE username='${username}' AND password='${password}'`;
-            con.query(sql, function (err, result) {
+            con.connect(function(err) {
+                if (err) throw err;
+                let sql = `SELECT * FROM users WHERE username='${username}' AND password='${password}'`;
+                con.query(sql, function (err, result) {
+                    if (err) {
+                        res.send({res:"bad", reason: "db"});
+                        throw err;
+                    }                
+                    res.send({res:"good", username:username, password: password});
+                });
+            });
+            con.end(function(err) {
                 if (err) {
-                    res.send({res:"bad", reason: "db"});
-                    throw err;
-                }                
-                res.send({res:"good", username:username, password: password});
+                  return console.log("Ошибка: " + err.message);
+                }
             });
         } else {
             res.send({res:"bad", reason: "access"});
