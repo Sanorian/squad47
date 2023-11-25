@@ -14,15 +14,15 @@ body{
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
     text-align: left;
+    font-size: 4.5vmin;
+    font-weight: bold;
     margin-top: 2%;
     margin-left: 2%;
     color: rgb(231, 231, 231);
 }
-.header_container{
-    border: solid grey;
-}
 .header_last_container{
-    text-align: right;
+    display: flex;
+    flex-direction: row;
 }
 .exit {
     border: 0;
@@ -35,10 +35,36 @@ body{
     background-color: rgb(207, 194, 194);
   }
   
-  .exit:hover {
+.exit:hover {
     background-color: rgb(158, 144, 144);
-  }
+}
   
-  .exit:active {
+.exit:active {
     background-color: rgb(109, 101, 101);;
-  }
+}
+aside{
+    float: left;
+    width: 20vw;
+    height: 100%;
+}
+header{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    border: solid grey;
+}
+.username{
+    margin-right: 20%;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 3vmin;
+    font-weight: bold;
+    color: rgb(231, 231, 231);
+}
+main{
+    display: flex;
+    flex-direction: row;
+}
+main div{
+    width: 80vw;
+    margin-left: 2vw;
+}
