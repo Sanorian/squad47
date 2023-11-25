@@ -13,6 +13,8 @@ body{
 .header{
     font-family: 'Montserrat', sans-serif;
     font-weight: bold;
-    text-align: center;
+    text-align: left;
+    margin-top: 2%;
+    margin-left: 2%;
     color: rgb(231, 231, 231);
 }
