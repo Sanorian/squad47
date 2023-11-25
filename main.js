@@ -257,6 +257,8 @@ function goTo(id){
                         <td>${riskLevel}</td>
                     </tr>`;
                     document.getElementById("applicationPlace").innerHTML += `</tbody></table>`
+                    document.getElementById('applicationPlace').innerHTML +=`<textarea placeholder="Комментарий" id="commentary"></textarea>`;
+                    document.getElementById("applicationPlace").innerHTML += `<div><button onclick="unapprove(${id})">Неодобрить</button><button onclick="approve(${id})">Одобрить</button></div>`
                     sessionStorage.setItem("lastID", id);
                     document.getElementById(`application${id}`).classList.add("chosen");
                 } else {
@@ -327,4 +329,87 @@ function isBusiness(business){
         .then((data)=>{
             return data.anwser;
         });
+}
+function approveApplication(id){
+    let errorPlace = document.getElementById("errorPlace")
+    if (document.getElementById("commentary").value){
+        try{
+            fetch("http://localhost:3000/updateapplication", {
+                method: "POST",
+                body: JSON.stringify({
+                    username: sessionStorage.getItem("username"),
+                    password: sessionStorage.getItem("password"),
+                    id: id,
+                    verdict: "approve",
+                    commentary: document.getElementById("commentary")
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+                }).catch(err=>{
+                    console.log(err);
+                    errorPlace.innerHTML="Что-то пошло не так";
+                })
+                .then((response)=>response.json())
+                .then((data)=>{
+                    if (data.res=="good"){
+                        document.getElementById(`application${id}`).remove();
+                        } else {
+                        switch (data.reason) {
+                            case "db":
+                                 errorPlace.innerHTML = "Ошибка базы данных. Попробуйте позже";
+                                break;
+                            case "access":
+                                errorPlace.innerHTML = "Отказано в доступе";
+                        }
+                    }
+                });
+            }catch(err){
+                console.log(err);
+            }
+    }else{
+        errorPlace.innerHTML = "Введите комментарий перед вынесением решения";
+    }
+}
+
+function unapproveApplication(){
+    let errorPlace = document.getElementById("errorPlace")
+    if (document.getElementById("commentary").value){
+        try{
+            fetch("http://localhost:3000/updateapplication", {
+                method: "POST",
+                body: JSON.stringify({
+                    username: sessionStorage.getItem("username"),
+                    password: sessionStorage.getItem("password"),
+                    id: id,
+                    verdict: "unapprove",
+                    commentary: document.getElementById("commentary")
+                }),
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                }
+                }).catch(err=>{
+                    console.log(err);
+                    errorPlace.innerHTML="Что-то пошло не так";
+                })
+                .then((response)=>response.json())
+                .then((data)=>{
+                    if (data.res=="good"){
+                        document.getElementById(`application${id}`).remove();
+                        } else {
+                        switch (data.reason) {
+                            case "db":
+                                 errorPlace.innerHTML = "Ошибка базы данных. Попробуйте позже";
+                                break;
+                            case "access":
+                                errorPlace.innerHTML = "Отказано в доступе";
+                        }
+                    }
+                });
+            }catch(err){
+                console.log(err);
+            }
+    }else{
+        errorPlace.innerHTML = "Введите комментарий перед вынесением решения";
+    }
 }
