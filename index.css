@@ -17,9 +17,27 @@ body{
     margin-top: 15%;
     color: rgb(231, 231, 231);
 }
-.login .password{
-    margin-left: 4%;
-}
+
 .login h1,h2{
     color: rgb(231, 231, 231);
+}
+main div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+button{
+    font-family: 'Montserrat', sans-serif;
+    margin-top: 1%;
+    border-radius:3vmin;
+    font-size: 2vmin;
+}
+.unright{
+    border-color: red;
+}
+input{
+    font-family: 'Montserrat', sans-serif;
+    border-radius:3vmin;
+    font-size: 2vmin;
+    padding: 0.5vmin;
 }
