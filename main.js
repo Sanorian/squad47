@@ -256,5 +256,40 @@ function getMonthPay(){
 }
 
 function isBuisness(){
-
+    fetch("https://api.gigachat.ai/chatbots", {
+        method: "POST",
+        body: JSON.stringify({
+            "name": "question",
+            "response": {
+                "n": 1,
+                "top_p": 1,
+                "stream": true,
+                "max_tokens": 200,
+                "memory_size": 0,
+                "temperature": 0.7,
+                "system_persona": "You are a friendly chatbot to help answer questions! Given the following sections from a website, answer the question using only that information. If you are unsure and the answer and it is not explicitly written in the context sections, say \"Sorry, I don't know how to help with that.\"",
+                "presence_penalty": 0,
+                "frequency_penalty": 0
+            },
+            "restrictions": {
+                "hostnames": [],
+                "ip_addresses": []
+            },
+            "documents": {
+                "results": {
+                    "match_count": 3,
+                    "match_threshold": 0.78
+                },
+                "text_splitter": {
+                    "chunk_size": 1000,
+                    "chunk_overlap": 200
+                }
+            }
+        }),
+        headers: {
+            "Content-type": "application/json",
+            "Authorization": "Bearer <API_KEY>"
+        }
+        }).then((response)=>response.json())
+        .then((data)=>{});
 }
