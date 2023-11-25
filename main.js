@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let errorPlace = document.getElementById("errorPlace");
     document.getElementById("usernamePlace").innerHTML = sessionStorage.getItem("username");
     try{
-        fetch("http://localhost:3000/getallapplications", {
+        fetch("http://localhost:8000/getallapplications", {
             method: "POST",
             body: JSON.stringify({
                 username: sessionStorage.getItem("username"),
@@ -19,8 +19,10 @@ document.addEventListener("DOMContentLoaded", (event) => {
             .then((response)=>response.json())
             .then((data)=>{
                 if (data.res=="good"){
-                    data.data.forEach(application => {
-                        document.getElementsByTagName("aside").innerHTML+=`<div onclick="goTo(${application.ID})" id="application${id}"><p>Заявка №${application.ID}</p></div>`;
+                    console.log("We get data");
+                    data.result.forEach(application => {
+                        let id = application[0];
+                        document.getElementsByTagName("aside")[0].innerHTML+=`<div onclick="goTo(${id})" id="application${id}"><p>Заявка №${id}</p></div>`;
                     });
                 } else {
                     switch (data.reason) {
@@ -43,7 +45,7 @@ function goTo(id){
     let errorPlace = document.getElementById("errorPlace");
     if (sessionStorage.getItem("lastID")) document.getElementById(`application${sessionStorage.getItem("lastID")}`).classList.remove("chosen");
     try{
-        fetch("http://localhost:3000/getoneapplication", {
+        fetch("http://localhost:8000/getoneapplication", {
             method: "POST",
             body: JSON.stringify({
                 username: sessionStorage.getItem("username"),
@@ -60,95 +62,96 @@ function goTo(id){
             .then((response)=>response.json())
             .then((data)=>{
                 if (data.res=="good"){
-                    let application = data.data;
-                    document.getElementById("applicationPlace").innerHTML = `<table><tbody>
+                    console.log("We got data");
+                    let application = data.result;
+                    let table = `<table><tbody>
                     <tr>
                         <td>ФИО:</td>
-                        <td>${application.FIO}</td>
+                        <td>${application[1]}</td>
                     </tr>
                     <tr>
                         <td>Дата рождения:</td>
-                        <td>${application.BirthDate.slice(0, 2)}.${application.BirthDate.slice(2, 4)}.${application.BirthDate.slice(4, 8)}</td>
+                        <td>${application[2].slice(0, 2)}.${application[1].slice(2, 4)}.${application[1].slice(4, 8)}</td>
                     </tr>
                     <tr>
                         <td>Паспортные данные:</td>
-                        <td>${application.PassportData.slice(0, 4)} ${application.PassportData.slice(4, 10)}</td>
+                        <td>${application[3].slice(0, 4)} ${application[3].slice(4, 10)}</td>
                     </tr>
                     <tr>
                         <td>Адрес регистрации:</td>
-                        <td>${application.RegistrationAdress}</td>
+                        <td>${application[4]}</td>
                     </tr>
                     <tr>
                         <td>Адрес проживания:</td>
-                        <td>${application.LivingAdress}</td>
+                        <td>${application[5]}</td>
                     </tr>
                     <tr>
                         <td>Семейное положение:</td>
-                        <td>${application.IsMarried}</td>
+                        <td>${application[6]}</td>
                     </tr>
                     <tr>
                         <td>Наличие детей:</td>
-                        <td>${application.HasChildren}</td>
+                        <td>${application[7]}</td>
                     </tr>
                     <tr>
                         <td>Место работы:</td>
-                        <td>${application.WorkPlace}</td>
+                        <td>${application[8]}</td>
                     </tr>
                     <tr>
                         <td>Стаж работы:</td>
-                        <td>${application.WorkTimeInMonths}</td>
+                        <td>${application[9]}</td>
                     </tr>
                     <tr>
                         <td>Должность:</td>
-                        <td>${application.WorkName}</td>
+                        <td>${application[10]}</td>
                     </tr>
                     <tr>
                         <td>Ежемесячный подтвержденный доход по месту работы:</td>
-                        <td>${application.Salary}</td>
+                        <td>${application[11]}</td>
                     </tr>
                     <tr>
                         <td>Документ, подтверждающий доход:</td>
-                        <td>${application.SalaryDocument}</td>
+                        <td>${application[12]}</td>
                     </tr>
                     <tr>
                         <td>Ежемесячный дополнительный доход:</td>
-                        <td>${application.AdditionalIncome}</td>
+                        <td>${application[13]}</td>
                     </tr>
                     <tr>
                         <td>Дополнительный доход подтвержден документально:</td>
-                        <td>${application.AdditionalIncomeDocument}</td>
+                        <td>${application[14]}</td>
                     </tr>
                     <tr>
                         <td>Источник дополнительного дохода:</td>
-                        <td>${application.FromAdditionalIncome}</td>
+                        <td>${application[15]}</td>
                     </tr>
                     <tr>
                         <td>Наличие сбережений на счетах в Банке:</td>
-                        <td>${application.HasMoney}</td>
+                        <td>${application[16]}</td>
                     </tr>`;
-                    if (application.HasMoney!="нет"){
-                        document.getElementById("applicationPlace").innerHTML += `
+                    if (application[16]!="нет"){
+                        table += `
                     <tr>
                         <td>Категория сбережения:</td>
-                        <td>${application.MoneyCategory}</td>
+                        <td>${application[17]}</td>
                     </tr>
                     <tr>
-                        <td>Категория сбережения:</td>
-                        <td>${application.HowMuchMoney}</td>
+                        <td>Сумма сбережений:</td>
+                        <td>${application[18]}</td>
                     </tr>`;}
-                    if (SalaryDocument!="нет"){
-                        document.getElementById("applicationPlace").innerHTML += `
+                    if (application[12]!="нет"){
+                        table += `
                     <tr>
                         <td>2-НДФЛ:</td>
-                        <td>${application.IncomeLink1}</td>
+                        <td>${application[19]}</td>
                     </tr>`;}
-                    if (SalaryDocument){
-                        document.getElementById("applicationPlace").innerHTML += `
+                    if (application[12]){
+                        table += `
                     <tr>
                         <td>подтверждение доп. дохода:</td>
-                        <td>${application.IncomeLink1}</td>
+                        <td>${application[20]}</td>
                     </tr>`;}
-                    let scores = 0, age = new Date().getFullYear() - application.BirthDate.slice(4, 8);
+                    let scores = 0, age = new Date().getFullYear() - application[2].slice(4, 8);
                     // Возраст
                     if (age<=25) {
                         scores+=5;
@@ -160,15 +163,15 @@ function goTo(id){
                         scores+=10;
                     }
                     //Семейное положение
-                    if (application.IsMarried=="Холост"){
+                    if (application[6]=="Холост"){
                         scores+=3;
-                    } else if (application.IsMarried=="Женат" || application.IsMarried=="Замужем"){
+                    } else if (application[6]=="Женат" || application[6]=="Замужем"){
                         scores+=2;
                     } else {
                         scores+=5;
                     }
                     //Наличие детей
-                    if (application.HasChildren=="Да"){
+                    if (application[7]=="Да"){
                         scores+=3;
                     } else {
                         scores+=5;
@@ -185,10 +188,10 @@ function goTo(id){
                         scores+=3;
                     }
                     //Основной источник получения доходов
-                    if (application.WorkPlace!="Нет"){
+                    if (application[8]!="Нет"){
                         scores+=2;
                     } else{
-                        switch (application.FromAdditionalIncome) {
+                        switch (application[15]) {
                             case "Пенсия":
                                 scores+=2;
                                 break;
@@ -201,19 +204,19 @@ function goTo(id){
                         }
                     }
                     //Стаж
-                    if (application.WorkTimeInMonths>60){
+                    if (application[9]>60){
                         scores+=2;
-                    } else if (12<application.WorkTimeInMonths<=60){
+                    } else if (12<application[9]<=60){
                         scores+=3;
                     } else {
                         scores+=10;
                     }
                     //ПДН
                     let PDN;
-                    if (application.AdditionalIncomeDocument){
-                        PDN = getMonthPay()/(application.AdditionalIncome+application.Salary);
+                    if (application[14]){
+                        PDN = getMonthPay()/(application[13]+application[11]);
                     } else {
-                        PDN = getMonthPay()/(application.Salary);
+                        PDN = getMonthPay()/(application[11]);
                     }
     
                     if (PDN<=0.7){
@@ -224,7 +227,7 @@ function goTo(id){
                         scores+=20;
                     }
                     //Общий доход
-                    let allIncome = application.Salary + application.AdditionalIncome;
+                    let allIncome = application[11] + application[13];
                     if (allIncome>250000){
                         scores+=3;
                     } else if (101000<allIncome<=250000){
@@ -235,7 +238,7 @@ function goTo(id){
                         scores+=15;
                     }
                     //Есть ли сбережения
-                    if (application.HasMoney=="Да"){
+                    if (application[16]=="Да"){
                         scores+=1;
                     } else {
                         scores+=5;
@@ -248,7 +251,7 @@ function goTo(id){
                     } else {
                         riskLevel = "Высокий";
                     }
-                    document.getElementById("applicationPlace").innerHTML += ` 
+                    table += ` 
                     <tr>
                         <td>Итого</td>
                         <td>${scores}</td>
@@ -256,10 +259,10 @@ function goTo(id){
                     <tr>
                         <td>Уровень риска:</td>
                         <td>${riskLevel}</td>
-                    </tr>`;
-                    document.getElementById("applicationPlace").innerHTML += `</tbody></table>`
-                    document.getElementById('applicationPlace').innerHTML +=`<textarea placeholder="Комментарий" id="commentary"></textarea>`;
-                    document.getElementById("applicationPlace").innerHTML += `<div><button onclick="unapprove(${id})">Неодобрить</button><button onclick="approve(${id})">Одобрить</button></div>`
+                    </tr></tbody></table>`;
+                    document.getElementById("applicationPlace").innerHTML = table;
+                    document.getElementById('applicationPlace').innerHTML +=`<div><textarea placeholder="Комментарий" id="commentary"></textarea>`;
+                    document.getElementById("applicationPlace").innerHTML += `<div><button onclick="unapprove(${id})">Неодобрить</button><button onclick="approve(${id})">Одобрить</button></div></div>`
                     sessionStorage.setItem("lastID", id);
                     document.getElementById(`application${id}`).classList.add("chosen");
                 } else {
@@ -335,7 +338,7 @@ function approveApplication(id){
     let errorPlace = document.getElementById("errorPlace")
     if (document.getElementById("commentary").value){
         try{
-            fetch("http://localhost:3000/updateapplication", {
+            fetch("http://localhost:8000/updateapplication", {
                 method: "POST",
                 body: JSON.stringify({
                     username: sessionStorage.getItem("username"),
@@ -377,7 +380,7 @@ function unapproveApplication(){
     let errorPlace = document.getElementById("errorPlace")
     if (document.getElementById("commentary").value){
         try{
-            fetch("http://localhost:3000/updateapplication", {
+            fetch("http://localhost:8000/updateapplication", {
                 method: "POST",
                 body: JSON.stringify({
                     username: sessionStorage.getItem("username"),

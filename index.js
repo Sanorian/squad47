@@ -4,7 +4,7 @@ function logIn(){
         if (username && password){
             document.getElementById("password").classList.remove("unright");
             document.getElementById("username").classList.remove("unright");
-            fetch("http://localhost:3000/login", {
+            fetch("http://localhost:8000/login", {
                 method: "POST",
                 body: JSON.stringify({
                     username: username,

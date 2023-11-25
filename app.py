@@ -1,8 +1,10 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, Body, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Union
 from pydantic import BaseModel
 from mysql.connector import connect, Error
+from fastapi.param_functions import Depends
+
 
 app = FastAPI()
 app.add_middleware(
@@ -19,6 +21,12 @@ class Item(BaseModel):
     id: Union[str, None] = None
     commentary: Union[str, None] = None
     verdict: Union[str, None] = None
+
+class Item3(BaseModel):
+    username: str
+    password: str
+    id: int
+
 
 class Item2(BaseModel):
     username: str
@@ -63,7 +71,7 @@ def getallapplications(item: Item):
         print(e)
         return {"res": "bad", "reason": "db"}
 
-@app.post('/getallposts')
+@app.post('/getallapplications')
 def getallapplications(item: Item):
     try:
         with connect(
@@ -85,8 +93,9 @@ def getallapplications(item: Item):
         print(e)
         return {"res": "bad", "reason": "db"}
 
+
 @app.post('/getoneapplication')
-def getoneapplication(item: Item):
+def getallapplications(item: Item3):
     try:
         with connect(
             host="localhost",
@@ -100,16 +109,18 @@ def getoneapplication(item: Item):
                 postData = cursor.fetchone()
                 if postData == None:
                     return {"res": "bad", "reason": "access"}
-                query1 = "SELECT * FROM applications WHERE ID='"+item.id+"'"
+                query1 = "SELECT * FROM applications WHERE ID='"+str(item.id)+"'"
                 cursor.execute(query1)
                 return {"res":"good", "result": cursor.fetchone()}
     except Error as e:
         print(e)
         return {"res": "bad", "reason": "db"}
+
     
 @app.post('/addapplication')
 def getallapplications(item: Item2):
     try:
+        print(item.username, item.password, item.id)
         with connect(
             host="localhost",
             user="manager",
