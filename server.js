@@ -10,14 +10,17 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.post("/getallapplications", (req, res)=>{
-    try {
-        const username = req.body.username;
-        const password = req.body.password;
+    const username = req.body.username;
+    const password = req.body.password;
     
-        var con = getConnection(mysql);
+    var con = getConnection(mysql);
     
-        haveAccess(username, password, con, function(access){
-            if (access){
+    con.connect(function(err) {
+        if (err) console.log(err);
+        sql = 'SELECT * FROM users WHERE username=? AND password=?';
+        con.query(sql, [username, password], function (err, result) {
+            if (err) console.log(err);
+            if (result.length==1){
                 con.query("SELECT * FROM applications WHERE Moderated='no'", function (err, result) {
                     if (err) {
                         res.send({res:"bad", reason: "db"});
@@ -30,17 +33,14 @@ app.post("/getallapplications", (req, res)=>{
                         }
                     }
                 });
-                con.end();
             } else {
-                res.send({res:"bad", reason: "access"});
+                res.send({res: "bad", reason:"access"});
             }
         });
-    } catch (error) {
-        console.error(error);
-        res.send({res:"bad", reason: "server"});
-    }
-});
+        con.end();
+    });
 
+});
 
 app.post("/getoneapplication", (req, res)=>{
     try {
@@ -193,8 +193,8 @@ app.listen(port, () => {
 function haveAccess(username, password, con, callback){
     con.connect(function(err) {
         if (err) console.log(err);
-        sql = `SELECT * FROM users WHERE username='${username}' AND password='${password}'`;
-        con.query(sql, function (err, result) {
+        sql = 'SELECT * FROM users WHERE username=? AND password=?';
+        con.query(sql, [username, password], function (err, result) {
             if (err) console.log(err);
             if (result.length==1){
                 callback(true);
