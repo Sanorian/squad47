@@ -90,7 +90,7 @@ app.put("/addapplication", (req, res)=>{
         if (access){
             con.connect(function(err) {
                 if (err) throw err;
-                let sql = `INSERT INTO applications (FIO, PassportData, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkAdress, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney) VALUES('${fio}', '${registrationAdress}', '${livingAdress}', '${isMarried}', '${hasChildren}', '${workAdress}', '${workTimeInMonths}', '${workName}', '${salary}', '${salaryDocument}', '${additionalIncome}', '${additionalIncomeDocument}', '${fromAdditionalIncome}', '${hasMoney}')`;
+                let sql = `INSERT INTO applications (FIO, PassportData, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkAdress, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney, Moderated) VALUES('${fio}', '${registrationAdress}', '${livingAdress}', '${isMarried}', '${hasChildren}', '${workAdress}', '${workTimeInMonths}', '${workName}', '${salary}', '${salaryDocument}', '${additionalIncome}', '${additionalIncomeDocument}', '${fromAdditionalIncome}', '${hasMoney}', 'no')`;
                 con.query(sql, function (err, result) {
                     if (err) {
                         res.send({res:"bad", reason: "db"});
