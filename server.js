@@ -15,12 +15,12 @@ app.post("/getallapplications", (req, res)=>{
     
         haveAccess(username, password, con, function(access){
             if (access){
-                if (err) throw err;
+                if (err) console.log(err);
                 let sql = "SELECT ID FROM applications WHERE Moderated='no'";
                 con.query(sql, function (err, result) {
                     if (err) {
                         res.send({res:"bad", reason: "db"});
-                        throw err;
+                        console.log(err);
                     }
                     res.send({res:"good", data: result});
                 });
@@ -56,12 +56,12 @@ app.post("/getoneapplication", (req, res)=>{
         haveAccess(username, password, con, function(access){
             if (access){
                 con.connect(function(err) {
-                    if (err) throw err;
+                    if (err) console.log(err);
                     let sql = `SELECT FIO, BirthDate, PassportData, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkPlace, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney, MoneyCategory, HowMuchMoney, IncomeLink1, IncomeLink2 FROM applications WHERE ID='${id}'`;
                     con.query(sql, function (err, result) {
                         if (err) {
                             res.send({res:"bad", reason: "db"});
-                            throw err;
+                            console.log(err);
                         }if (result.length!=0){
                             res.send({res:"good", data: result[0]});
                         } else {
@@ -115,12 +115,12 @@ app.put("/addapplication", (req, res)=>{
         haveAccess(username, password, con, function(access){
             if (access){
                 con.connect(function(err) {
-                    if (err) throw err;
+                    if (err) console.log(err);
                     let sql = `INSERT INTO applications (FIO, BirthDate, PassportData, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkPlace, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney, MoneyCategory, HowMuchMoney, Moderated, IncomeLink1, IncomeLink2) VALUES('${fio}', '${birthDate}', '${registrationAdress}', '${livingAdress}', '${isMarried}', '${hasChildren}', '${workPlace}', '${workTimeInMonths}', '${workName}', '${salary}', '${salaryDocument}', '${additionalIncome}', '${additionalIncomeDocument}', '${fromAdditionalIncome}', '${hasMoney}', '${moneyCategory}', '${howMuchMoney}', 'no', '${incomeLink1}', '${incomeLink2}')`;
                     con.query(sql, function (err, result) {
                         if (err) {
                             res.send({res:"bad", reason: "db"});
-                            throw err;
+                            console.log(err);
                         }
                         res.send({res:"good"});
                     });
@@ -154,12 +154,12 @@ app.patch("/updateapplication", (req, res)=>{
         haveAccess(username, password, con, function(access){
             if (access){
                 con.connect(function(err) {
-                    if (err) throw err;
+                    if (err) console.log(err);
                     let sql = `UPDATE applications SET Moderated='yes', Verdict='${verdict}', Moderator=(SELECT ID from users WHERE username='${username}' AND password='${password}'), Commentary='${commentary}' WHERE ID='${id}'`;
                     con.query(sql, function (err, result) {
                         if (err) {
                             res.send({res:"bad", reason: "db"});
-                            throw err;
+                            if (err) console.log(err);
                         }
                         res.send({res:"good"});
                     });
@@ -190,12 +190,12 @@ app.post("/login", (req, res)=>{
         haveAccess(username, password, con, function(access){
             if (access){
                 con.connect(function(err) {
-                    if (err) throw err;
+                    if (err) console.log(err);
                     let sql = `SELECT * FROM users WHERE username='${username}' AND password='${password}'`;
                     con.query(sql, function (err, result) {
                         if (err) {
                             res.send({res:"bad", reason: "db"});
-                            throw err;
+                            if (err) console.log(err);
                         }                
                         res.send({res:"good", username:username, password: password});
                     });
@@ -224,10 +224,10 @@ app.listen(port, () => {
 
 function haveAccess(username, password, con, callback){
     con.connect(function(err) {
-        if (err) throw err;
+        if (err) console.log(err);
         sql = `SELECT * FROM users WHERE username='${username}' AND password='${password}'`;
         con.query(sql, function (err, result) {
-            if (err) throw err;
+            if (err) console.log(err);
             if (result.length==1){
                 callback(true);
             } else {
