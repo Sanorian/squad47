@@ -4,6 +4,7 @@ const mysql = require("mysql");
 
 
 app.post("/getallapplications", (req, res)=>{
+    res.header('Access-Control-Allow-Origin', '*');
     const username = req.body.username;
     const password = req.query.password;
 
@@ -32,6 +33,7 @@ app.post("/getallapplications", (req, res)=>{
 });
 
 app.post("/getoneapplication", (req, res)=>{
+    res.header('Access-Control-Allow-Origin', '*');
     const id = req.body.id;
     const username = req.body.username;
     const password = req.query.password;
@@ -63,6 +65,7 @@ app.post("/getoneapplication", (req, res)=>{
 });
 
 app.put("/addapplication", (req, res)=>{
+    res.header('Access-Control-Allow-Origin', '*');
     const username = req.body.username;
     const password = req.body.password;
 
@@ -108,6 +111,7 @@ app.put("/addapplication", (req, res)=>{
 });
 
 app.patch("/updateapplication", (req, res)=>{
+    res.header('Access-Control-Allow-Origin', '*');
     const username = req.body.username;
     const password = req.body.password;
     const id = req.body.id;
@@ -140,6 +144,7 @@ app.patch("/updateapplication", (req, res)=>{
 });
 
 app.post("/login", (req, res)=>{
+    res.header('Access-Control-Allow-Origin', '*');
     const username = req.body.username;
     const password = req.body.password;
 
