@@ -175,7 +175,7 @@ function goTo(id){
                         case "Пенсия":
                             scores+=2;
                             break;
-                        case isBuisness()=="Предпринимательство":
+                        case isBusiness()=="Да.":
                             scores+=7;
                             break;
                         default:
@@ -255,7 +255,7 @@ function getMonthPay(){
 
 }
 
-function isBuisness(){
+function isBusiness(business){
     fetch("https://api.gigachat.ai/chatbots", {
         method: "POST",
         body: JSON.stringify({
@@ -289,7 +289,14 @@ function isBuisness(){
         headers: {
             "Content-type": "application/json",
             "Authorization": "Bearer <API_KEY>"
+        },
+        data:{
+            "conversation_id": "12345",
+            "user_id": "charl@example.com",
+            "prompt": "Отвечай только Да или Нет. В твоем ответе должно быть только одно слово. Можно ли сказать, что "+business+" - предпринимательство?"
         }
         }).then((response)=>response.json())
-        .then((data)=>{});
+        .then((data)=>{
+            return data.anwser;
+        });
 }
