@@ -18,3 +18,27 @@ body{
     margin-left: 2%;
     color: rgb(231, 231, 231);
 }
+.header_container{
+    border: solid grey;
+}
+.header_last_container{
+    text-align: right;
+}
+.exit {
+    border: 0;
+    line-height: 2.5;
+    padding: 0 20px;
+    font-size: 1rem;
+    text-align: right;
+    color: #fff;
+    border-radius: 10px;
+    background-color: rgb(207, 194, 194);
+  }
+  
+  .exit:hover {
+    background-color: rgb(158, 144, 144);
+  }
+  
+  .exit:active {
+    background-color: rgb(109, 101, 101);;
+  }
