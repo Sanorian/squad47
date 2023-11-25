@@ -13,12 +13,12 @@ app.post("/getallapplications", (req, res)=>{
     haveAccess(username, password, con, function(access){
         if (access){
             if (err) throw err;
-            let sql = "SELECT * FROM applications WHERE Moderated='no'";
+            let sql = "SELECT ID FROM applications WHERE Moderated='no'";
             con.query(sql, function (err, result) {
                 if (err) {
                     res.send({res:"bad", reason: "db"});
                     throw err;
-                }                
+                }
                 res.send({res:"good", data: result});
             });
             con.end(function(err) {
@@ -44,12 +44,12 @@ app.post("/getoneapplication", (req, res)=>{
         if (access){
             con.connect(function(err) {
                 if (err) throw err;
-                let sql = `SELECT * FROM applications WHERE ID='${id}'`;
+                let sql = `SELECT FIO, BirthDate, PassportData, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkPlace, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney, MoneyCategory, HowMuchMoney, IncomeLink1, IncomeLink2 FROM applications WHERE ID='${id}'`;
                 con.query(sql, function (err, result) {
                     if (err) {
                         res.send({res:"bad", reason: "db"});
                         throw err;
-                    }                
+                    }
                     res.send({res:"good", data: result});
                 });
             });
@@ -70,11 +70,12 @@ app.put("/addapplication", (req, res)=>{
     const password = req.body.password;
 
     const fio = req.body.fio;
+    const birthDate = req.body.birthdate;
     const registrationAdress = req.body.registrationadress;
     const livingAdress = req.body.livingadress;
     const isMarried = req.body.ismarried;
     const hasChildren = req.body.haschildren;
-    const workAdress = req.body.workadress;
+    const workPlace = req.body.workplace;
     const workTimeInMonths = req.body.worktimeinmonths;
     const workName = req.body.workname;
     const salary  = req.body.salary;
@@ -83,6 +84,10 @@ app.put("/addapplication", (req, res)=>{
     const additionalIncomeDocument = req.body.additionalincomedocument;
     const fromAdditionalIncome = req.body.fromadditionalincome;
     const hasMoney = req.body.hasMoney;
+    const incomeLink1 = req.query.incomelink1;
+    const incomeLink2 = req.query.incomelink2;
+    const moneyCategory = req.body.moneycategory;
+    const howMuchMoney = req.query.howmuchmoney;
 
     var con = getConnection(mysql);
 
@@ -90,7 +95,7 @@ app.put("/addapplication", (req, res)=>{
         if (access){
             con.connect(function(err) {
                 if (err) throw err;
-                let sql = `INSERT INTO applications (FIO, PassportData, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkAdress, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney, Moderated) VALUES('${fio}', '${registrationAdress}', '${livingAdress}', '${isMarried}', '${hasChildren}', '${workAdress}', '${workTimeInMonths}', '${workName}', '${salary}', '${salaryDocument}', '${additionalIncome}', '${additionalIncomeDocument}', '${fromAdditionalIncome}', '${hasMoney}', 'no')`;
+                let sql = `INSERT INTO applications (FIO, BirthDate, PassportData, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkPlace, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney, MoneyCategory, HowMuchMoney, Moderated, IncomeLink1, IncomeLink2) VALUES('${fio}', '${birthDate}', '${registrationAdress}', '${livingAdress}', '${isMarried}', '${hasChildren}', '${workPlace}', '${workTimeInMonths}', '${workName}', '${salary}', '${salaryDocument}', '${additionalIncome}', '${additionalIncomeDocument}', '${fromAdditionalIncome}', '${hasMoney}', '${moneyCategory}', '${howMuchMoney}', 'no', '${incomeLink1}', '${incomeLink2}')`;
                 con.query(sql, function (err, result) {
                     if (err) {
                         res.send({res:"bad", reason: "db"});
@@ -116,6 +121,7 @@ app.patch("/updateapplication", (req, res)=>{
     const password = req.body.password;
     const id = req.body.id;
     const verdict = req.body.verdict;
+    const commentary = req.body.commentary;
 
     var con = getConnection(mysql);
 
@@ -123,7 +129,7 @@ app.patch("/updateapplication", (req, res)=>{
         if (access){
             con.connect(function(err) {
                 if (err) throw err;
-                let sql = `UPDATE applications SET Moderated='yes', Verdict='${verdict}', Moderator=(SELECT ID from users WHERE username='${username}' AND password='${password}') WHERE ID='${id}'`;
+                let sql = `UPDATE applications SET Moderated='yes', Verdict='${verdict}', Moderator=(SELECT ID from users WHERE username='${username}' AND password='${password}'), Commentary='${commentary}' WHERE ID='${id}'`;
                 con.query(sql, function (err, result) {
                     if (err) {
                         res.send({res:"bad", reason: "db"});
