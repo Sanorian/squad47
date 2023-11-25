@@ -24,12 +24,12 @@ document.addEventListener("DOMContentLoaded", (event) => {
                 } else {
                     switch (data.reason) {
                         case "db":
-                            errorPlace.classList.remove("hidden");
                              errorPlace.innerHTML = "Ошибка базы данных. Попробуйте позже";
                             break;
                         case "access":
-                            errorPlace.classList.remove("hidden");
                             errorPlace.innerHTML = "Отказано в доступе";
+                        case "noone":
+                            eror
                     }
                 }
             });
@@ -199,6 +199,14 @@ function goTo(id){
                                 break;
                         }
                     }
+                    //Стаж
+                    if (application.WorkTimeInMonths>60){
+                        scores+=2;
+                    } else if (12<application.WorkTimeInMonths<=60){
+                        scores+=3;
+                    } else {
+                        scores+=10;
+                    }
                     //ПДН
                     let PDN;
                     if (application.AdditionalIncomeDocument){
@@ -262,7 +270,6 @@ function goTo(id){
                 }
         });
     } catch(error){
-        errorPlace.classList.remove("hidden");
         errorPlace.innerHTML = "Что-то пошло не так";
     }
 }
