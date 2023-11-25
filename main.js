@@ -1,6 +1,7 @@
 if (!sessionStorage.getItem("username") || !sessionStorage.getItem("password")) location.href="index.html";
 document.addEventListener("DOMContentLoaded", (event) => { 
     let errorPlace = document.getElementById("errorPlace");
+    document.getElementById("usernamePlace").innerHTML = sessionStorage.getItem("username");
     try{
         fetch("http://localhost:3000/getallapplications", {
             method: "POST",
@@ -412,4 +413,10 @@ function unapproveApplication(){
     }else{
         errorPlace.innerHTML = "Введите комментарий перед вынесением решения";
     }
+}
+
+function logOut(){
+    sessionStorage.removeItem("username");
+    sessionStorage.removeItem("password");
+    location.href="index.html";
 }
