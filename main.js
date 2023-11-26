@@ -262,7 +262,7 @@ function goTo(id){
                     </tr></tbody></table>`;
                     document.getElementById("applicationPlace").innerHTML = table;
                     document.getElementById('applicationPlace').innerHTML +=`<div><textarea placeholder="Комментарий" id="commentary"></textarea>`;
-                    document.getElementById("applicationPlace").innerHTML += `<div><button onclick="unapprove(${id})">Неодобрить</button><button onclick="approve(${id})">Одобрить</button></div></div>`
+                    document.getElementById("applicationPlace").innerHTML += `<div><button onclick="unapproveApplication(${id})">Неодобрить</button><button onclick="approveApplication(${id})">Одобрить</button></div></div>`
                     sessionStorage.setItem("lastID", id);
                     document.getElementById(`application${id}`).classList.add("chosen");
                 } else {
@@ -376,7 +376,7 @@ function approveApplication(id){
     }
 }
 
-function unapproveApplication(){
+function unapproveApplication(id){
     let errorPlace = document.getElementById("errorPlace")
     if (document.getElementById("commentary").value){
         try{
@@ -385,9 +385,9 @@ function unapproveApplication(){
                 body: JSON.stringify({
                     username: sessionStorage.getItem("username"),
                     password: sessionStorage.getItem("password"),
-                    id: id,
+                    id: String(id),
                     verdict: "unapprove",
-                    commentary: document.getElementById("commentary")
+                    commentary: document.getElementById("commentary").value
                 }),
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
