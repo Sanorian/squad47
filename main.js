@@ -42,7 +42,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
 
 function goTo(id){
     let errorPlace = document.getElementById("errorPlace");
-    if (sessionStorage.getItem("lastID")) document.getElementById(`application${sessionStorage.getItem("lastID")}`).classList.remove("chosen");
     try{
         fetch("http://192.168.31.23:8000/getoneapplication", {
             method: "POST",
@@ -69,7 +68,7 @@ function goTo(id){
                     </tr>
                     <tr>
                         <td>Дата рождения:</td>
-                        <td>${application[2].slice(0, 2)}.${application[1].slice(2, 4)}.${application[1].slice(4, 8)}</td>
+                        <td>${application[2].slice(0, 2)}.${application[2].slice(2, 4)}.${application[2].slice(4, 8)}</td>
                     </tr>
                     <tr>
                         <td>Паспортные данные:</td>
@@ -259,8 +258,7 @@ function goTo(id){
                         <td>${riskLevel}</td>
                     </tr></tbody></table>`;
                     document.getElementById("applicationPlace").innerHTML = table;
-                    document.getElementById('applicationPlace').innerHTML +=`<div><textarea placeholder="Комментарий" id="commentary"></textarea>`;
-                    document.getElementById("applicationPlace").innerHTML += `<div><button onclick="unapproveApplication(${id})">Неодобрить</button><button onclick="approveApplication(${id})">Одобрить</button></div></div>`
+                    document.getElementById("applicationPlace").innerHTML += `<div><textarea placeholder="Комментарий" id="commentary"></textarea><div class="buttons"><button onclick="unapproveApplication(${id})">Не одобрить</button><button onclick="approveApplication(${id})">Одобрить</button></div></div>`
                     sessionStorage.setItem("lastID", id);
                     document.getElementById(`application${id}`).classList.add("chosen");
                 } else {
