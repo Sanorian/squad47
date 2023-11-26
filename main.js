@@ -3,7 +3,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
     let errorPlace = document.getElementById("errorPlace");
     document.getElementById("usernamePlace").innerHTML = sessionStorage.getItem("username");
     try{
-        fetch("http://localhost:8000/getallapplications", {
+        fetch("http://192.168.31.23:8000/getallapplications", {
             method: "POST",
             body: JSON.stringify({
                 username: sessionStorage.getItem("username"),
@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", (event) => {
             .then((response)=>response.json())
             .then((data)=>{
                 if (data.res=="good"){
-                    console.log("We get data");
                     data.result.forEach(application => {
                         let id = application[0];
                         document.getElementsByTagName("aside")[0].innerHTML+=`<div onclick="goTo(${id})" id="application${id}"><p>Заявка №${id}</p></div>`;
@@ -45,7 +44,7 @@ function goTo(id){
     let errorPlace = document.getElementById("errorPlace");
     if (sessionStorage.getItem("lastID")) document.getElementById(`application${sessionStorage.getItem("lastID")}`).classList.remove("chosen");
     try{
-        fetch("http://localhost:8000/getoneapplication", {
+        fetch("http://192.168.31.23:8000/getoneapplication", {
             method: "POST",
             body: JSON.stringify({
                 username: sessionStorage.getItem("username"),
@@ -62,7 +61,6 @@ function goTo(id){
             .then((response)=>response.json())
             .then((data)=>{
                 if (data.res=="good"){
-                    console.log("We got data");
                     let application = data.result;
                     let table = `<table><tbody>
                     <tr>
@@ -338,14 +336,14 @@ function approveApplication(id){
     let errorPlace = document.getElementById("errorPlace")
     if (document.getElementById("commentary").value){
         try{
-            fetch("http://localhost:8000/updateapplication", {
+            fetch("http://192.168.31.23:8000/updateapplication", {
                 method: "POST",
                 body: JSON.stringify({
                     username: sessionStorage.getItem("username"),
                     password: sessionStorage.getItem("password"),
-                    id: id,
+                    id: String(id),
                     verdict: "approve",
-                    commentary: document.getElementById("commentary")
+                    commentary: document.getElementById("commentary").value
                 }),
                 headers: {
                     "Content-type": "application/json; charset=UTF-8"
@@ -358,6 +356,7 @@ function approveApplication(id){
                 .then((data)=>{
                     if (data.res=="good"){
                         document.getElementById(`application${id}`).remove();
+                        document.getElementById("applicationPlace").innerHTML = "";
                         } else {
                         switch (data.reason) {
                             case "db":
@@ -380,7 +379,7 @@ function unapproveApplication(id){
     let errorPlace = document.getElementById("errorPlace")
     if (document.getElementById("commentary").value){
         try{
-            fetch("http://localhost:8000/updateapplication", {
+            fetch("http://192.168.31.23:8000/updateapplication", {
                 method: "POST",
                 body: JSON.stringify({
                     username: sessionStorage.getItem("username"),
@@ -400,6 +399,7 @@ function unapproveApplication(id){
                 .then((data)=>{
                     if (data.res=="good"){
                         document.getElementById(`application${id}`).remove();
+                        document.getElementById("applicationPlace").innerHTML = "";
                         } else {
                         switch (data.reason) {
                             case "db":
