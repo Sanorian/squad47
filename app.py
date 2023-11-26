@@ -2,8 +2,9 @@ from fastapi import FastAPI, Request, Body, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Union
 from pydantic import BaseModel
-from mysql.connector import connect, Error
+from mysql.connector import connect
 from fastapi.param_functions import Depends
+from mysql.connector.errors import Error
 
 
 app = FastAPI()
@@ -27,6 +28,12 @@ class Item3(BaseModel):
     password: str
     id: int
 
+class Item4(BaseModel):
+    username: str
+    password: str
+    id: str
+    commentary: str
+    verdict: str
 
 class Item2(BaseModel):
     username: str
@@ -120,7 +127,6 @@ def getallapplications(item: Item3):
 @app.post('/addapplication')
 def getallapplications(item: Item2):
     try:
-        print(item.username, item.password, item.id)
         with connect(
             host="localhost",
             user="manager",
@@ -133,15 +139,16 @@ def getallapplications(item: Item2):
                 postData = cursor.fetchone()
                 if postData == None:
                     return {"res": "bad", "reason": "access"}
-                query1 = "INSERT INTO applications (FIO, BirthDate, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkPlace, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney, MoneyCategory, HowMuchMoney, Moderated, IncomeLink1, IncomeLink2) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
-                cursor.execute(query1, [item.fio, item.birthDate, item.registrationAdress, item.livingAdress, item.isMarried, item.hasChildren, item.workPlace, item.workTimeInMonths, item.workName, item.salary, item.salaryDocument, item.additionalIncome, item.additionalIncomeDocument, item.fromAdditionalIncome, item.hasMoney, item.moneyCategory, item.howMuchMoney, 'no', item.incomeLink1, item.incomeLink2])
+                query1 = "INSERT INTO applications (FIO, BirthDate, RegistrationAdress, LivingAdress, IsMarried, HasChildren, WorkPlace, WorkTimeInMonths, WorkName, Salary, SalaryDocument, AdditionalIncome, AdditionalIncomeDocument, FromAdditionalIncome, HasMoney, MoneyCategory, HowMuchMoney, Moderated, IncomeLink1, IncomeLink2) VALUES(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,'no',%s,%s)"
+                cursor.execute(query1, (item.fio, item.birthDate, item.registrationAdress, item.livingAdress, item.isMarried, item.hasChildren, item.workPlace, item.workTimeInMonths, item.workName, item.salary, item.salaryDocument, item.additionalIncome, item.additionalIncomeDocument, item.fromAdditionalIncome, item.hasMoney, item.moneyCategory, item.howMuchMoney, item.incomeLink1, item.incomeLink2))
+                connection.commit()
                 return {"res":"good"}
     except Error as e:
         print(e)
         return {"res": "bad", "reason": "db"}
     
 @app.post('/updateapplication')
-def getallapplications(item: Item):
+def getallapplications(item: Item4):
     try:
         with connect(
             host="localhost",
@@ -155,8 +162,9 @@ def getallapplications(item: Item):
                 postData = cursor.fetchone()
                 if postData == None:
                     return {"res": "bad", "reason": "access"}
-                query1 = "UPDATE applications SET Moderated='yes', Verdict=?, Moderator=(SELECT ID from users WHERE username=? AND password=?), Commentary=? WHERE ID=?"
-                cursor.execute(query1, [item.verdict, item.username, item.password, item.commentary, item.id])
+                query1 = "UPDATE applications SET Moderated='yes', Verdict='"+item.verdict+"', Moderartor=(SELECT ID from users WHERE username='"+item.username+"' AND password='"+item.password+"'), Commentary='"+item.commentary+"' WHERE ID="+item.id
+                cursor.execute(query1)
+                connection.commit()
                 return {"res":"good"}
     except Error as e:
         print(e)
