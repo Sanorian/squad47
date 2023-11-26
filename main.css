@@ -6,7 +6,7 @@ body{
     padding: 0;  
     font-family: 'Montserrat', sans-serif;
     background: linear-gradient(to left, green, rgb(116, 165, 126));
-    background-image: image-set("images/sber4k.png")!important;
+    background-image: image-set("http://localhost:8000/image")!important;
 
 }
 .login{

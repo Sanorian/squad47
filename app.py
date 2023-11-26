@@ -1,12 +1,11 @@
-from fastapi import FastAPI, Request, Body, HTTPException, status
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Union
 from pydantic import BaseModel
 from mysql.connector import connect
-from fastapi.param_functions import Depends
 from mysql.connector.errors import Error
-
-
+from fastapi.responses import HTMLResponse
+from starlette.responses import FileResponse 
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -57,6 +56,34 @@ class Item2(BaseModel):
     incomeLink2: Union[str, None] = None
     moneyCategory: Union[str, None] = None
     howMuchMoney: Union[str, None] = None
+
+@app.get("/")
+def index():
+    return FileResponse('index.html')
+
+@app.get("/main")
+def main():
+    return FileResponse('main.html')
+
+@app.get("/indexjs")
+def indexjs():
+    return FileResponse('index.js')
+
+@app.get("/indexcss")
+def indexcss():
+    return FileResponse('index.css')
+
+@app.get("/mainjs")
+def indexjs():
+    return FileResponse('main.js')
+
+@app.get("/maincss")
+def indexcss():
+    return FileResponse('main.css')
+
+@app.get("/image")
+def image():
+    return FileResponse('sber4k.png')
 
 @app.post("/login")
 def getallapplications(item: Item):
