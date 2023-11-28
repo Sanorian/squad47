@@ -1,0 +1,5 @@
+pip install fastapi
+pip install cors
+pip install mysql-connector-python
+pip install hipercorn
+pip install unicorn
