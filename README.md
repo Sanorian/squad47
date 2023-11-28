@@ -3,6 +3,7 @@
 ```
 pip install fastapi
 pip install mysql-connector-python
+pip install cors
 pip install hipercorn
 pip install uvicorn
 ```
