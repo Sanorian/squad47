@@ -1,11 +1,12 @@
-## FastAPI:
+
+## Dependencies:
 ```
 pip install fastapi
 pip install mysql-connector-python
-pip install hypercorn
+pip install hipercorn
 pip install uvicorn
 ```
-## Для запуска серверного приложения (без перехода в папку backend) для тестирования:
+## Для запуска серверного приложения для тестирования:
 ```
-python -m uvicorn server:app --reload
+python -m uvicorn app:app -host 0.0.0.0 --reload
 ```
