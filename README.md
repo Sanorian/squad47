@@ -1,4 +1,5 @@
-
+# Description:
+That's web app, created during hackathon. It's workplace for credit assistence
 ## Dependencies:
 ```
 pip install fastapi
