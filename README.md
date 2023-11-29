@@ -10,10 +10,14 @@ That's web app, created during hackathon. It's workplace for credit assistence
 pip install fastapi
 pip install mysql-connector-python
 pip install cors
-pip install hipercorn
+pip install hypercorn
 pip install uvicorn
 ```
 ## Для запуска серверного приложения для тестирования:
 ```
-python -m uvicorn app:app -host 0.0.0.0 --reload
+python -m uvicorn app:app --reload
+```
+## For release:
+```
+python -m hypercorn app:app
 ```
