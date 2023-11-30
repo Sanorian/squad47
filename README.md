@@ -1,3 +1,7 @@
+## Design by: Михаил Краснов
+## Frontend by: Даниил Коростелев и Александр Крайнов
+## Backend by: Александр Крайнов
+
 # Description:
 That's web app, created during hackathon. It's workplace for credit assistence
 ## Screenshots of our platform:
