@@ -1,0 +1,5 @@
+aiofiles
+asyncio
+hypercorn
+fastapi
+cors

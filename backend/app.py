@@ -5,7 +5,8 @@ from pydantic import BaseModel
 from mysql.connector import connect
 from mysql.connector.errors import Error
 from fastapi.responses import HTMLResponse
-from starlette.responses import FileResponse 
+from starlette.responses import FileResponse
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -57,39 +58,11 @@ class Item2(BaseModel):
     moneyCategory: Union[str, None] = None
     howMuchMoney: Union[str, None] = None
 
-@app.get("/")
-def index():
-    return FileResponse('index.html')
-
-@app.get("/main")
-def main():
-    return FileResponse('main.html')
-
-@app.get("/indexjs")
-def indexjs():
-    return FileResponse('index.js')
-
-@app.get("/indexcss")
-def indexcss():
-    return FileResponse('index.css')
-
-@app.get("/mainjs")
-def indexjs():
-    return FileResponse('main.js')
-
-@app.get("/maincss")
-def indexcss():
-    return FileResponse('main.css')
-
-@app.get("/image")
-def image():
-    return FileResponse('sber4k.png')
-
 @app.post("/login")
 def getallapplications(item: Item):
     try:
         with connect(
-            host="localhost",
+            host="0.0.0.0",
             user="manager",
             password="manager123",
             database="CreditDB"
@@ -109,7 +82,7 @@ def getallapplications(item: Item):
 def getallapplications(item: Item):
     try:
         with connect(
-            host="localhost",
+            host="0.0.0.0",
             user="manager",
             password="manager123",
             database="CreditDB"
@@ -132,7 +105,7 @@ def getallapplications(item: Item):
 def getallapplications(item: Item3):
     try:
         with connect(
-            host="localhost",
+            host="0.0.0.0",
             user="manager",
             password="manager123",
             database="CreditDB"
@@ -155,7 +128,7 @@ def getallapplications(item: Item3):
 def getallapplications(item: Item2):
     try:
         with connect(
-            host="localhost",
+            host="0.0.0.0",
             user="manager",
             password="manager123",
             database="CreditDB"
@@ -178,7 +151,7 @@ def getallapplications(item: Item2):
 def getallapplications(item: Item4):
     try:
         with connect(
-            host="localhost",
+            host="0.0.0.0",
             user="manager",
             password="manager123",
             database="CreditDB"

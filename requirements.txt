@@ -1,5 +1,0 @@
-pip install fastapi
-pip install cors
-pip install mysql-connector-python
-pip install hypercorn
-pip install uvicorn

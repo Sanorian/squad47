@@ -1,9 +1,9 @@
-if (!sessionStorage.getItem("username") || !sessionStorage.getItem("password")) location.href="index.html";
+if (!sessionStorage.getItem("username") || !sessionStorage.getItem("password")) location.href="http://localhost/index";
 document.addEventListener("DOMContentLoaded", (event) => { 
     let errorPlace = document.getElementById("errorPlace");
     document.getElementById("usernamePlace").innerHTML = sessionStorage.getItem("username");
     try{
-        fetch("http://192.168.31.23:8000/getallapplications", {
+        fetch("http://localhost:8000/getallapplications", {
             method: "POST",
             body: JSON.stringify({
                 username: sessionStorage.getItem("username"),
@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", (event) => {
 function goTo(id){
     let errorPlace = document.getElementById("errorPlace");
     try{
-        fetch("http://192.168.31.23:8000/getoneapplication", {
+        fetch("http://localhost:8000/getoneapplication", {
             method: "POST",
             body: JSON.stringify({
                 username: sessionStorage.getItem("username"),
@@ -334,7 +334,7 @@ function approveApplication(id){
     let errorPlace = document.getElementById("errorPlace")
     if (document.getElementById("commentary").value){
         try{
-            fetch("http://192.168.31.23:8000/updateapplication", {
+            fetch("http://localhost:8000/updateapplication", {
                 method: "POST",
                 body: JSON.stringify({
                     username: sessionStorage.getItem("username"),
@@ -377,7 +377,7 @@ function unapproveApplication(id){
     let errorPlace = document.getElementById("errorPlace")
     if (document.getElementById("commentary").value){
         try{
-            fetch("http://192.168.31.23:8000/updateapplication", {
+            fetch("http://localhost:8000/updateapplication", {
                 method: "POST",
                 body: JSON.stringify({
                     username: sessionStorage.getItem("username"),
@@ -419,5 +419,5 @@ function unapproveApplication(id){
 function logOut(){
     sessionStorage.removeItem("username");
     sessionStorage.removeItem("password");
-    location.href="index.html";
+    location.href="http://localhost";
 }
