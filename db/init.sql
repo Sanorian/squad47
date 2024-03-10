@@ -26,3 +26,4 @@ CREATE TABLE applications (ID INT PRIMARY KEY AUTO_INCREMENT,
                             );
 
 CREATE TABLE users (ID INT PRIMARY KEY AUTO_INCREMENT, username VARCHAR(50), password VARCHAR(50));
+INSERT INTO users (username, password) VALUES ('manager', 'manager123');

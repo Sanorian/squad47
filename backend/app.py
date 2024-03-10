@@ -62,7 +62,8 @@ class Item2(BaseModel):
 def getallapplications(item: Item):
     try:
         with connect(
-            host="0.0.0.0",
+            host="db",
+            port=3306,
             user="manager",
             password="manager123",
             database="CreditDB"
@@ -82,7 +83,8 @@ def getallapplications(item: Item):
 def getallapplications(item: Item):
     try:
         with connect(
-            host="0.0.0.0",
+            host="db",
+            port=3306,
             user="manager",
             password="manager123",
             database="CreditDB"
@@ -105,7 +107,8 @@ def getallapplications(item: Item):
 def getallapplications(item: Item3):
     try:
         with connect(
-            host="0.0.0.0",
+            host="db",
+            port=3306,
             user="manager",
             password="manager123",
             database="CreditDB"
@@ -128,7 +131,8 @@ def getallapplications(item: Item3):
 def getallapplications(item: Item2):
     try:
         with connect(
-            host="0.0.0.0",
+            host="db",
+            port=3306,
             user="manager",
             password="manager123",
             database="CreditDB"
@@ -151,7 +155,8 @@ def getallapplications(item: Item2):
 def getallapplications(item: Item4):
     try:
         with connect(
-            host="0.0.0.0",
+            host="db",
+            port=3306,
             user="manager",
             password="manager123",
             database="CreditDB"

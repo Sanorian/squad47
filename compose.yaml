@@ -3,24 +3,37 @@ services:
         build: backend
         ports:
             - '8000:8000'
+        networks:
+            - database_network
+
     frontend:
         build: frontend
         ports:
             - '80:8000'
+        networks:
+            - database_network
+
     db:
         image: mysql:latest
         ports:
-            - '0.0.0.0:3307:3306'
+            - '3307:3306'
         volumes:
-            - ./init.sql:/db/init.sql
+            - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
         environment:
             MYSQL_ROOT_PASSWORD: run/secrets/mysql_root_password
             MYSQL_DATABASE: CreditDB
             MYSQL_USER: manager
             MYSQL_PASSWORD_FILE: /run/secrets/mysql_password
+            MYSQL_ROOT_HOST: '%'
         secrets:
             - mysql_password
             - mysql_root_password
+        networks:
+            - database_network
+
+networks:
+    database_network:
+
 secrets:
     mysql_password:
         file: ./db/password.txt
