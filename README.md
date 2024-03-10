@@ -12,17 +12,10 @@ That's web app, created during hackathon. It's workplace for credit assistence
 ![alt text](https://github.com/Sanorian/squad47/blob/main/images/work_screen.png)
 ## Dependencies:
 ```
-pip install fastapi
-pip install mysql-connector-python
-pip install cors
-pip install hypercorn
-pip install uvicorn
+docker
+docker-compose
 ```
-## Для запуска серверного приложения для тестирования:
+## Для запуска:
 ```
-python -m uvicorn app:app --reload
-```
-## For release:
-```
-python -m hypercorn app:app
+docker-compose up
 ```
